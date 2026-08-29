@@ -60,9 +60,8 @@ export default function CopyGenerator() {
       const next = { ...f, ...patch };
       if (patch.brand || patch.category) {
         const filtered = filterCatalog(next.brand, next.category);
-        const first = filtered[0]?.label || '';
         if (!filtered.find((item) => item.label === next.targetProduct)) {
-          next.targetProduct = first;
+          next.targetProduct = '';
         }
       }
       return next;
@@ -100,6 +99,9 @@ export default function CopyGenerator() {
             <option key={p.label} value={p.label}>{p.label}</option>
           ))}
         </select>
+        {filtered.length === 0 && (
+          <p className="text-xs text-slate-500">해당 조건에 맞는 상품이 없습니다. 브랜드 또는 품목을 변경해 주세요.</p>
+        )}
 
         <div className="grid grid-cols-2 gap-3">
           <div>
