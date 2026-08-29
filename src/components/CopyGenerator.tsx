@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Brand, Category, GeneratorInput } from '../types';
+import products from '../data/products-full.json';
 
 const brands: Brand[] = [
   '전체','코웨이','청호나이스','쿠쿠','SK매직','LG전자','교원웰스','현대큐밍','세스코'
@@ -13,6 +14,8 @@ const initial: GeneratorInput = {
   keyword: '',
   tone: '일반',
 };
+
+const targetOptions = Array.isArray(products) ? products.slice(0, 500) : [];
 
 function generateCopy(input: GeneratorInput): string {
   const product = input.targetProduct.trim() || '렌탈 상품';
@@ -73,12 +76,16 @@ export default function CopyGenerator() {
       <div className="space-y-3">
         <h2 className="text-base font-semibold">원고 생성 입력</h2>
         <label className="block text-xs text-slate-400">타겟 상품</label>
-        <input
+        <select
           value={form.targetProduct}
           onChange={(e) => update({ targetProduct: e.target.value })}
-          placeholder="예: 쿠쿠 대용량 얼음정수기"
           className="w-full rounded-lg bg-slate-900 border border-white/10 px-3 py-2 text-sm outline-none focus:border-brand-500"
-        />
+        >
+          <option value="">선택</option>
+          {targetOptions.map((p) => (
+            <option key={p} value={p}>{p}</option>
+          ))}
+        </select>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
