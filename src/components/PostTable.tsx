@@ -11,6 +11,9 @@ export default function PostTable({ items, onOpen }: Props) {
     return (
       <div className="rounded-xl border border-dashed border-white/10 bg-slate-900/40 p-6 text-center text-sm text-slate-400">
         조건에 맞는 게시글이 없습니다.
+        <span className="block mt-1 text-xs text-slate-500">
+          현재 수집된 데이터는 정수기 위주라 다른 품목은 결과가 적을 수 있습니다.
+        </span>
       </div>
     );
   }
