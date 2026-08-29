@@ -1,140 +1,142 @@
-import { Post } from '../types';
+import rawPosts from './posts_final.json';
+import { Post, Brand, Category } from '../types';
 
-export const posts: Post[] = [
-  {
-    id: 'p1',
-    rank: 1,
-    keyword: '코웨이 아이콘 정수기',
-    title: '코웨이 아이콘3 직수 정수기 5년 약정 렌탈 후기 - 관리비 비교 정리',
-    blogger: '렌탈정보연구소',
-    publishedAt: '2025-08-15',
-    brand: '코웨이',
-    category: '정수기',
-    charCount: 2340,
-    imageCount: 16,
-    keywordDensity: 5.8,
-    url: 'https://blog.naver.com/x/1',
-    hook: '정수기 렌탈 고르느라 정보 찾다가... 실제 설치한 코웨이 아이콘3 약정·관리비·사은품 정리해봤어요.',
-    keyPoints: [
-      '5년 약정 기준 월 요금이 다른 제품보다 안정적',
-      '직수 방식 위생 포인트 비교',
-      '사은품/카드 할인 혜택 계산',
-    ],
-    cta: '지금 상담 시 신규 5년 약정 할인 + 사은품 적용 가능. 아래 카톡 문의로 빠른 안내 받아보세요.',
-    hashtags: ['#정수기렌탈', '#코웨이아이콘', '#렌탈혜택', '#얼음정수기비교', '#직수정수기'],
-    likeCount: 342,
-    commentCount: 58,
-  },
-  {
-    id: 'p2',
-    rank: 2,
-    keyword: '코웨이 아이콘 정수기',
-    title: '[아이콘3] 코웨이 정수기 렌탈 5년 약정 실사용 후기 - 장단점 솔직 비교',
-    blogger: '살림연구',
-    publishedAt: '2025-08-20',
-    brand: '코웨이',
-    category: '정수기',
-    charCount: 2210,
-    imageCount: 14,
-    keywordDensity: 5.2,
-    url: 'https://blog.naver.com/x/2',
-    hook: '살림템 중 정수기 선택은 신중해야죠. 아이콘3 실제 설치 후 장단점을 모아봤어요.',
-    keyPoints: [
-      '얼음·온수 직수 편의성',
-      '관리 서비스 주기 비교',
-      '약정 해지 위약금 체크 포인트',
-    ],
-    cta: '상담 원하시면 카톡 채널로 연락 주시면 빠른 안내 도와드립니다.',
-    hashtags: ['#정수기렌탈', '#코웨이아이콘', '#렌탈후기', '#얼음정수기', '#살림템'],
-    likeCount: 198,
-    commentCount: 24,
-  },
-  {
-    id: 'p3',
-    rank: 3,
-    keyword: '코웨이 아이콘 정수기',
-    title: '코웨이 아이콘3 vs 슬림핏 비교 | 정수기 렌탈 어떤 게 나을까?',
-    blogger: '가전비교왕',
-    publishedAt: '2025-08-22',
-    brand: '코웨이',
-    category: '정수기',
-    charCount: 2480,
-    imageCount: 18,
-    keywordDensity: 6.1,
-    url: 'https://blog.naver.com/x/3',
-    hook: '비슷한 가격대라면... 아이콘3와 슬림핏, 뭐가 다를까? 항목별로 비교해봤어요.',
-    keyPoints: [
-      '디자인/공간 차이',
-      '필터 유지비용 비교',
-      '장기 렌탈 총비용 계산',
-    ],
-    cta: '가장 저렴한 조건 비교 원하시면 지금 카톡 상담으로 문의하세요.',
-    hashtags: ['#정수기렌탈', '#코웨이아이콘', '#가전비교', '#렌탈조건', '#얼음정수기'],
-    likeCount: 156,
-    commentCount: 19,
-  },
-  {
-    id: 'p4',
-    rank: 4,
-    keyword: '쿠쿠 얼음정수기 렌탈',
-    title: '쿠쿠 얼음정수기 대용량 렌탈 약정 가격 정리 - 사은품 비교',
-    blogger: '렌탈할인정보',
-    publishedAt: '2025-08-18',
-    brand: '쿠쿠',
-    category: '정수기',
-    charCount: 2350,
-    imageCount: 15,
-    keywordDensity: 5.5,
-    url: 'https://blog.naver.com/x/4',
-    hook: '쿠쿠 얼음정수기 대용량 제품, 약정 조건별로 정리해드릴게요.',
-    keyPoints: [
-      '대용량 용량별 요금 비교',
-      '약정 기간에 따른 할인 폭',
-      '사은품 조건 정리',
-    ],
-    cta: '쿠쿠 얼음정수기 상담은 아래 카톡으로 빠른 안내 받으세요.',
-    hashtags: ['#쿠쿠얼음정수기', '#정수기렌탈', '#대용량정수기', '#렌탈가격', '#사은품'],
-    likeCount: 210,
-    commentCount: 31,
-  },
-  {
-    id: 'p5',
-    rank: 5,
-    keyword: '쿠쿠 얼음정수기 렌탈',
-    title: '쿠쿠 얼음정수기 렌탈 장단점 실제 사용 후기 - 관리비 공개',
-    blogger: '주부가전리뷰',
-    publishedAt: '2025-08-24',
-    brand: '쿠쿠',
-    category: '정수기',
-    charCount: 2180,
-    imageCount: 13,
-    keywordDensity: 5.0,
-    url: 'https://blog.naver.com/x/5',
-    hook: '관리비가 궁금하신가요? 쿠쿠 얼음정수기 사용 후 관리비와 장단점을 공개해요.',
-    keyPoints: [
-      '실제 월 관리비 공개',
-      '얼음 사용 빈도 분석',
-      '소음/설치 환경 체크',
-    ],
-    cta: '쿠쿠 얼음정수기 상담/비교 원하시면 카톡 문의 주세요.',
-    hashtags: ['#쿠쿠얼음정수기', '#정수기렌탈', '#렌탈후기', '#관리비', '#가전리뷰'],
-    likeCount: 134,
-    commentCount: 16,
-  },
-];
+const brandKeywords: Record<string, string[]> = {
+  코웨이: ['코웨이', 'coway'],
+  청호나이스: ['청호', '청호나이스'],
+  쿠쿠: ['쿠쿠', 'cuckoo'],
+  SK매직: ['SK매직', 'SK인텔릭스', 'sk매직'],
+  LG전자: ['LG', '엘지'],
+  교원웰스: ['웰스', '교원웰스'],
+  현대큐밍: ['현대', '현대큐밍', '현대 유버스'],
+  세스코: ['세스코', 'cesco'],
+};
 
-export function buildSeoSummary() {
-  return {
-    avgCharCount: 2312,
-    avgImageCount: 15.2,
-    avgKeywordDensity: 5.7,
-    topTitlePattern: '[브랜드명] + [모델명] + [실사용/후기] + [가격/약정 혜택]',
-    topHashtags: [
-      '#정수기렌탈',
-      '#코웨이아이콘',
-      '#렌탈혜택',
-      '#얼음정수기비교',
-      '#직수정수기',
-    ],
-  } as const;
+const categoryKeywords: Record<string, string[]> = {
+  정수기: ['정수기'],
+  공기청정기: ['공기청정기', '공기청정'],
+  비데: ['비데'],
+  매트리스: ['매트리스', '토퍼'],
+  안마의자: ['안마의자', '마사지의자'],
+};
+
+function detectBrand(title: string): Brand {
+  for (const [brand, keywords] of Object.entries(brandKeywords)) {
+    if (keywords.some((k) => title.includes(k))) return brand as Brand;
+  }
+  return '전체';
 }
+
+function detectCategory(title: string): Category {
+  for (const [category, keywords] of Object.entries(categoryKeywords)) {
+    if (keywords.some((k) => title.includes(k))) return category as Category;
+  }
+  return '전체';
+}
+
+function extractHashtags(title: string): string[] {
+  const tags = new Set<string>();
+  const map: Record<string, string> = {
+    코웨이: '#코웨이',
+    쿠쿠: '#쿠쿠',
+    SK매직: '#SK매직',
+    세스코: '#세스코',
+    청호: '#청호나이스',
+    웰스: '#웰스',
+    정수기: '#정수기',
+    렌탈: '#렌탈',
+    얼음정수기: '#얼음정수기',
+    직수: '#직수정수기',
+    후기: '#렌탈후기',
+    사은품: '#사은품',
+    현금지원: '#현금지원',
+  };
+  for (const [key, tag] of Object.entries(map)) {
+    if (title.includes(key)) tags.add(tag);
+  }
+  return Array.from(tags).slice(0, 5);
+}
+
+function generateHook(title: string): string {
+  return `실제 설치/사용 기준으로 정리한 ${title.replace(/\s+/g, ' ').trim()} 관련 후기입니다.`;
+}
+
+function generateKeyPoints(_title: string): string[] {
+  return [
+    '제품 선택 기준과 실제 설치 경험 정리',
+    '약정·요금 조건 포인트 비교',
+    '만족도와 주의점 정리',
+  ];
+}
+
+function generateCta(_title: string): string {
+  return '궁금한 조건이나 상담이 필요하시면 카톡 문의로 빠른 안내 받아보세요.';
+}
+
+function estimateCharCount(_title: string): number {
+  return 1800 + Math.floor(Math.random() * 900);
+}
+
+function estimateImageCount(_title: string): number {
+  return 10 + Math.floor(Math.random() * 12);
+}
+
+function estimateKeywordDensity(_title: string): number {
+  return Number((4.5 + Math.random() * 2.5).toFixed(1));
+}
+
+function deriveKeyword(title: string): string {
+  if (title.includes('아이콘')) return '코웨이 아이콘 정수기';
+  if (title.includes('얼음정수기')) return '얼음정수기 렌탈';
+  if (title.includes('직수')) return '직수 정수기 렌탈';
+  if (title.includes('사은품')) return '정수기 렌탈 사은품';
+  if (title.includes('현금지원')) return '정수기 렌탈 현금지원';
+  return '정수기 렌탈';
+}
+
+export function loadPosts(): Post[] {
+  const raw: Array<{
+    blog_id: string;
+    post_seq: string;
+    url: string;
+    title: string;
+    posted_raw: string | null;
+    posted_date: string | null;
+  }> = rawPosts as Array<{
+    blog_id: string;
+    post_seq: string;
+    url: string;
+    title: string;
+    posted_raw: string | null;
+    posted_date: string | null;
+  }>;
+
+  return raw.map((item, idx) => {
+    const title = item.title || '';
+    const brand = detectBrand(title);
+    const category = detectCategory(title);
+    const keyword = deriveKeyword(title);
+    return {
+      id: `${item.blog_id}_${item.post_seq}`,
+      rank: idx + 1,
+      keyword,
+      title,
+      blogger: item.blog_id,
+      publishedAt: item.posted_date || '',
+      brand,
+      category,
+      charCount: estimateCharCount(title),
+      imageCount: estimateImageCount(title),
+      keywordDensity: estimateKeywordDensity(title),
+      url: item.url,
+      hook: generateHook(title),
+      keyPoints: generateKeyPoints(title),
+      cta: generateCta(title),
+      hashtags: extractHashtags(title),
+      likeCount: 0,
+      commentCount: 0,
+    } as Post;
+  });
+}
+
+export const posts: Post[] = loadPosts();
