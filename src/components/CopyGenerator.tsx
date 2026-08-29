@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Brand, Category, GeneratorInput } from '../types';
-import products from '../data/products-full.json';
+import catalog from '../data/products-catalog.json';
 
 const brands: Brand[] = [
   '전체','코웨이','청호나이스','쿠쿠','SK매직','LG전자','교원웰스','현대큐밍','세스코'
@@ -15,7 +15,7 @@ const initial: GeneratorInput = {
   tone: '일반',
 };
 
-const targetOptions = Array.isArray(products) ? products.slice(0, 500) : [];
+type ProductItem = { label: string; brand: string; category: string };
 
 function generateCopy(input: GeneratorInput): string {
   const product = input.targetProduct.trim() || '렌탈 상품';
@@ -56,9 +56,23 @@ export default function CopyGenerator() {
   const [copied, setCopied] = useState(false);
 
   const update = (patch: Partial<GeneratorInput>) => {
-    setForm((f) => ({ ...f, ...patch }));
+    setForm((f) => {
+      const next = { ...f, ...patch };
+      if (patch.brand || patch.category) {
+        const filtered = filterCatalog(next.brand, next.category);
+        const first = filtered[0]?.label || '';
+        if (!filtered.find((item) => item.label === next.targetProduct)) {
+          next.targetProduct = first;
+        }
+      }
+      return next;
+    });
     setCopied(false);
   };
+
+  const filtered = useMemo(() => {
+    return filterCatalog(form.brand, form.category);
+  }, [form.brand, form.category]);
 
   const run = () => {
     setCopy(generateCopy(form));
@@ -78,12 +92,12 @@ export default function CopyGenerator() {
         <label className="block text-xs text-slate-400">타겟 상품</label>
         <select
           value={form.targetProduct}
-          onChange={(e) => update({ targetProduct: e.target.value })}
+          onChange={(e) => setForm((f) => ({ ...f, targetProduct: e.target.value }))}
           className="w-full rounded-lg bg-slate-900 border border-white/10 px-3 py-2 text-sm outline-none focus:border-brand-500"
         >
           <option value="">선택</option>
-          {targetOptions.map((p) => (
-            <option key={p} value={p}>{p}</option>
+          {filtered.map((p) => (
+            <option key={p.label} value={p.label}>{p.label}</option>
           ))}
         </select>
 
@@ -117,7 +131,7 @@ export default function CopyGenerator() {
         <label className="block text-xs text-slate-400">메인 키워드</label>
         <input
           value={form.keyword}
-          onChange={(e) => update({ keyword: e.target.value })}
+          onChange={(e) => setForm((f) => ({ ...f, keyword: e.target.value }))}
           placeholder="예: 아이콘3, 얼음정수기, 사은품"
           className="w-full rounded-lg bg-slate-900 border border-white/10 px-3 py-2 text-sm outline-none focus:border-brand-500"
         />
@@ -125,7 +139,7 @@ export default function CopyGenerator() {
         <label className="block text-xs text-slate-400">톤</label>
         <select
           value={form.tone}
-          onChange={(e) => update({ tone: e.target.value as GeneratorInput['tone'] })}
+          onChange={(e) => setForm((f) => ({ ...f, tone: e.target.value as GeneratorInput['tone'] }))}
           className="w-full rounded-lg bg-slate-900 border border-white/10 px-3 py-2 text-sm outline-none focus:border-brand-500"
         >
           <option value="일반">일반</option>
@@ -158,4 +172,14 @@ export default function CopyGenerator() {
       </div>
     </div>
   );
+}
+
+function filterCatalog(brand: Brand, category: Category): ProductItem[] {
+  const items: ProductItem[] = Array.isArray(catalog) ? catalog : [];
+  if (brand === '전체' && category === '전체') return items.slice(0, 300);
+  return items.filter((item) => {
+    const matchBrand = brand === '전체' || item.brand === brand;
+    const matchCategory = category === '전체' || item.category === category;
+    return matchBrand && matchCategory;
+  });
 }
