@@ -2,7 +2,6 @@
 """네이버 크롤 데이터 병합 → allrental-seo 배포 자동 동기화 스크립트."""
 import json
 import os
-import shutil
 import subprocess
 from datetime import datetime
 
@@ -11,15 +10,17 @@ PROJECT_DIR = os.path.abspath(os.path.join(BASE_DIR, '..'))
 CRAWL_DIR = '/opt/data/naver_blog_crawl'
 DEST_JSON = os.path.join(PROJECT_DIR, 'src', 'data', 'posts_final.json')
 
+FILES = {
+    '정수기': os.path.join(CRAWL_DIR, 'posts_final.json'),
+    '공기청정기': os.path.join(CRAWL_DIR, '공기청정기렌탈_full.json'),
+    '비데': os.path.join(CRAWL_DIR, '비데렌탈_full.json'),
+    '매트리스': os.path.join(CRAWL_DIR, '매트리스렌탈_full.json'),
+    '안마의자': os.path.join(CRAWL_DIR, '안마의자렌탈_full.json'),
+}
+
 def merge_crawl_data():
-    files = {
-        '정수기': os.path.join(CRAWL_DIR, 'posts_final.json'),
-        '공기청정기': os.path.join(CRAWL_DIR, '공기청정기렌탈_full.json'),
-        '비데': os.path.join(CRAWL_DIR, '비데렌탈_full.json'),
-        '매트리스': os.path.join(CRAWL_DIR, '매트리스렌탈_full.json'),
-    }
     merged = []
-    for category, path in files.items():
+    for category, path in FILES.items():
         if not os.path.exists(path):
             continue
         with open(path, 'r', encoding='utf-8') as f:
@@ -41,13 +42,13 @@ def write_merged(merged):
         json.dump(merged, f, ensure_ascii=False, indent=2)
 
 def git_commit_and_push():
-    cmds = [
-        ['git', 'add', '.'],
+    subprocess.run(['git', 'add', '.'], cwd=PROJECT_DIR, check=True)
+    subprocess.run(
         ['git', 'commit', '-m', f'feat: sync naver crawl data (all categories) {datetime.now().strftime("%Y-%m-%d %H:%M")}'],
-        ['git', 'push', 'origin', 'main'],
-    ]
-    for cmd in cmds:
-        subprocess.run(cmd, cwd=PROJECT_DIR, check=True)
+        cwd=PROJECT_DIR,
+        check=True,
+    )
+    subprocess.run(['git', 'push', 'origin', 'main'], cwd=PROJECT_DIR, check=True)
 
 def vercel_deploy():
     token = os.environ.get('VERCEL_TOKEN')
