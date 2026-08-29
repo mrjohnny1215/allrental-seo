@@ -12,56 +12,67 @@ const brandKeywords: Record<string, string[]> = {
   세스코: ['세스코', 'cesco'],
 };
 
-const categoryKeywords: Record<string, string[]> = {
-  정수기: ['정수기'],
-  공기청정기: ['공기청정기', '공기청정'],
-  비데: ['비데'],
-  매트리스: ['매트리스', '토퍼'],
-  안마의자: ['안마의자', '마사지의자'],
-};
-
-function detectBrand(title: string): Brand {
+function detectBrandFromAny(text: string): Brand {
+  const t = text || '';
   for (const [brand, keywords] of Object.entries(brandKeywords)) {
-    if (keywords.some((k) => title.includes(k))) return brand as Brand;
+    if (keywords.some((k) => t.includes(k))) return brand as Brand;
   }
   return '전체';
 }
 
-function detectCategory(title: string): Category {
-  for (const [category, keywords] of Object.entries(categoryKeywords)) {
-    if (keywords.some((k) => title.includes(k))) return category as Category;
-  }
-  return '전체';
+function cleanTitle(rawTitle: string, fallbackCategory: string): string {
+  const t = (rawTitle || '').trim();
+  if (!t) return `${fallbackCategory} 렌탈 후기`;
+  if (t.match(/^\d+[주일분초] 전$/)) return `${fallbackCategory} 렌탈 후기`;
+  return t;
 }
 
-function extractHashtags(title: string): string[] {
+function pickKeyword(title: string, category: Category): string {
+  if (category === '공기청정기') return '공기청정기 렌탈';
+  if (category === '비데') return '비데 렌탈';
+  if (category === '매트리스') return '매트리스 렌탈';
+  if (category === '안마의자') return '안마의자 렌탈';
+  if (title.includes('아이콘')) return '코웨이 아이콘 정수기';
+  if (title.includes('얼음정수기')) return '얼음정수기 렌탈';
+  if (title.includes('직수')) return '직수 정수기 렌탈';
+  if (title.includes('사은품')) return '정수기 렌탈 사은품';
+  if (title.includes('현금지원')) return '정수기 렌탈 현금지원';
+  return '정수기 렌탈';
+}
+
+function extractHashtags(title: string, category: Category): string[] {
   const tags = new Set<string>();
-  const map: Record<string, string> = {
-    코웨이: '#코웨이',
-    쿠쿠: '#쿠쿠',
-    SK매직: '#SK매직',
-    세스코: '#세스코',
-    청호: '#청호나이스',
-    웰스: '#웰스',
-    정수기: '#정수기',
-    렌탈: '#렌탈',
-    얼음정수기: '#얼음정수기',
-    직수: '#직수정수기',
-    후기: '#렌탈후기',
-    사은품: '#사은품',
-    현금지원: '#현금지원',
-  };
-  for (const [key, tag] of Object.entries(map)) {
-    if (title.includes(key)) tags.add(tag);
+  const pool = [
+    { k: '코웨이', t: '#코웨이' },
+    { k: '쿠쿠', t: '#쿠쿠' },
+    { k: 'SK매직', t: '#SK매직' },
+    { k: '세스코', t: '#세스코' },
+    { k: '청호', t: '#청호나이스' },
+    { k: '웰스', t: '#웰스' },
+    { k: '정수기', t: '#정수기' },
+    { k: '렌탈', t: '#렌탈' },
+    { k: '얼음정수기', t: '#얼음정수기' },
+    { k: '직수', t: '#직수정수기' },
+    { k: '후기', t: '#렌탈후기' },
+    { k: '사은품', t: '#사은품' },
+    { k: '현금지원', t: '#현금지원' },
+    { k: '공기청정기', t: '#공기청정기' },
+    { k: '비데', t: '#비데' },
+    { k: '매트리스', t: '#매트리스' },
+    { k: '안마의자', t: '#안마의자' },
+  ];
+  for (const { k, t } of pool) {
+    if (title.includes(k) || category.includes(k as Category)) tags.add(t);
   }
   return Array.from(tags).slice(0, 5);
 }
 
-function generateHook(title: string): string {
-  return `실제 설치/사용 기준으로 정리한 ${title.replace(/\s+/g, ' ').trim()} 관련 후기입니다.`;
+function generateHook(title: string, category: Category): string {
+  const subject = title || `${category} 렌탈`;
+  return `실제 설치/사용 기준으로 정리한 ${subject.replace(/\s+/g, ' ').trim()} 관련 후기입니다.`;
 }
 
-function generateKeyPoints(_title: string): string[] {
+function generateKeyPoints(_title: string, _category: Category): string[] {
   return [
     '제품 선택 기준과 실제 설치 경험 정리',
     '약정·요금 조건 포인트 비교',
@@ -69,29 +80,20 @@ function generateKeyPoints(_title: string): string[] {
   ];
 }
 
-function generateCta(_title: string): string {
+function generateCta(_title: string, _category: Category): string {
   return '궁금한 조건이나 상담이 필요하시면 카톡 문의로 빠른 안내 받아보세요.';
 }
 
-function estimateCharCount(_title: string): number {
+function estimateCharCount(_title: string, _category: Category): number {
   return 1800 + Math.floor(Math.random() * 900);
 }
 
-function estimateImageCount(_title: string): number {
+function estimateImageCount(_title: string, _category: Category): number {
   return 10 + Math.floor(Math.random() * 12);
 }
 
-function estimateKeywordDensity(_title: string): number {
+function estimateKeywordDensity(_title: string, _category: Category): number {
   return Number((4.5 + Math.random() * 2.5).toFixed(1));
-}
-
-function deriveKeyword(title: string): string {
-  if (title.includes('아이콘')) return '코웨이 아이콘 정수기';
-  if (title.includes('얼음정수기')) return '얼음정수기 렌탈';
-  if (title.includes('직수')) return '직수 정수기 렌탈';
-  if (title.includes('사은품')) return '정수기 렌탈 사은품';
-  if (title.includes('현금지원')) return '정수기 렌탈 현금지원';
-  return '정수기 렌탈';
 }
 
 export function loadPosts(): Post[] {
@@ -102,6 +104,7 @@ export function loadPosts(): Post[] {
     title: string;
     posted_raw: string | null;
     posted_date: string | null;
+    category: Category;
   }> = rawPosts as Array<{
     blog_id: string;
     post_seq: string;
@@ -109,13 +112,15 @@ export function loadPosts(): Post[] {
     title: string;
     posted_raw: string | null;
     posted_date: string | null;
+    category: Category;
   }>;
 
   return raw.map((item, idx) => {
-    const title = item.title || '';
-    const brand = detectBrand(title);
-    const category = detectCategory(title);
-    const keyword = deriveKeyword(title);
+    const rawCategory = (item.category || '전체') as Category;
+    const sourceText = `${item.title || ''} ${rawCategory}`;
+    const brand = detectBrandFromAny(sourceText);
+    const title = cleanTitle(item.title, rawCategory);
+    const keyword = pickKeyword(title, rawCategory);
     return {
       id: `${item.blog_id}_${item.post_seq}`,
       rank: idx + 1,
@@ -124,15 +129,15 @@ export function loadPosts(): Post[] {
       blogger: item.blog_id,
       publishedAt: item.posted_date || '',
       brand,
-      category,
-      charCount: estimateCharCount(title),
-      imageCount: estimateImageCount(title),
-      keywordDensity: estimateKeywordDensity(title),
+      category: rawCategory,
+      charCount: estimateCharCount(title, rawCategory),
+      imageCount: estimateImageCount(title, rawCategory),
+      keywordDensity: estimateKeywordDensity(title, rawCategory),
       url: item.url,
-      hook: generateHook(title),
-      keyPoints: generateKeyPoints(title),
-      cta: generateCta(title),
-      hashtags: extractHashtags(title),
+      hook: generateHook(title, rawCategory),
+      keyPoints: generateKeyPoints(title, rawCategory),
+      cta: generateCta(title, rawCategory),
+      hashtags: extractHashtags(title, rawCategory),
       likeCount: 0,
       commentCount: 0,
     } as Post;
